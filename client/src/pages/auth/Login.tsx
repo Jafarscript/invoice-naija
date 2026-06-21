@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useAuth } from "../../context/AuthContext";
@@ -26,8 +25,9 @@ const Login = () => {
       const { data } = await api.post("/auth/login", form);
       login(data);
       navigate("/dashboard");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Something went wrong");
+    } catch (err) {
+      const error = err as { response?: { data?: { message?: string } } };
+  setError(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
