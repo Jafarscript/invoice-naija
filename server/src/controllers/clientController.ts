@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { Response } from "express";
+import { AuthRequest } from "../types/express";
 import Client from "../models/Client";
 
 export const createClient = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   const { name, email, phone, address } = req.body;
@@ -23,7 +24,7 @@ export const createClient = async (
 };
 
 export const getClients = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
@@ -38,7 +39,7 @@ export const getClients = async (
 };
 
 export const getClient = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
@@ -59,7 +60,7 @@ export const getClient = async (
 };
 
 export const updateClient = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   const { name, email, phone, address } = req.body;
@@ -83,7 +84,7 @@ export const updateClient = async (
 };
 
 export const deleteClient = async (
-  req: Request,
+  req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
