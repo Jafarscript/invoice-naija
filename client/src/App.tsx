@@ -7,6 +7,7 @@ import Clients from "./pages/clients/Clients";
 import Invoices from "./pages/invoices/Invoices";
 import Layout from "./components/Layout";
 import CreateInvoice from "./pages/invoices/CreateInvoice";
+import EditInvoice from "./pages/invoices/EditInvoice";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
@@ -24,6 +25,7 @@ const App = () => {
        <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
       <Route path="/invoices" element={<ProtectedRoute><Invoices /></ProtectedRoute>} />
       <Route path="/invoices/create" element={<ProtectedRoute><CreateInvoice /></ProtectedRoute>} />
+      <Route path="/invoices/:id/edit" element={<ProtectedRoute><EditInvoice /></ProtectedRoute>} />
       <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
     </Routes>
   );

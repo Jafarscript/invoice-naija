@@ -16,19 +16,19 @@ const Invoices = () => {
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   useEffect(() => {
-  const fetchInvoices = async () => {
-    try {
-      const { data } = await api.get("/invoices");
-      setInvoices(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const fetchInvoices = async () => {
+      try {
+        const { data } = await api.get("/invoices");
+        setInvoices(data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  fetchInvoices();
-}, []);
+    fetchInvoices();
+  }, []);
 
   const handleStatusChange = async (id: string, status: string) => {
     setUpdatingId(id);
@@ -43,7 +43,8 @@ const Invoices = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this invoice?")) return;
+    if (!window.confirm("Are you sure you want to delete this invoice?"))
+      return;
     try {
       await api.delete(`/invoices/${id}`);
       setInvoices(invoices.filter((inv) => inv._id !== id));
@@ -57,6 +58,25 @@ const Invoices = () => {
       style: "currency",
       currency: "NGN",
     }).format(amount);
+  };
+
+  const handleDownloadPDF = async (id: string, invoiceNumber: string) => {
+    try {
+      const response = await api.get(`/invoices/${id}/pdf`, {
+        responseType: "blob",
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${invoiceNumber}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -106,14 +126,18 @@ const Invoices = () => {
                 {/* Left */}
                 <div className="flex flex-col gap-1">
                   <div className="flex items-center gap-3">
-                    <span className="font-semibold">{invoice.invoiceNumber}</span>
+                    <span className="font-semibold">
+                      {invoice.invoiceNumber}
+                    </span>
                     <span
                       className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[invoice.status]}`}
                     >
                       {invoice.status}
                     </span>
                   </div>
-                  <p className="text-slate-400 text-sm">{invoice.client.name}</p>
+                  <p className="text-slate-400 text-sm">
+                    {invoice.client.name}
+                  </p>
                   <p className="text-slate-400 text-xs">
                     Due: {new Date(invoice.dueDate).toLocaleDateString("en-NG")}
                   </p>
@@ -140,11 +164,26 @@ const Invoices = () => {
                     <option value="overdue">Overdue</option>
                   </select>
 
+                  <Link
+                    to={`/invoices/${invoice._id}/edit`}
+                    className="text-blue-400 hover:text-blue-300 text-xs transition"
+                  >
+                    Edit
+                  </Link>
                   <button
                     onClick={() => handleDelete(invoice._id)}
                     className="text-red-400 hover:text-red-300 text-xs transition"
                   >
                     Delete
+                  </button>
+
+                  <button
+                    onClick={() =>
+                      handleDownloadPDF(invoice._id, invoice.invoiceNumber)
+                    }
+                    className="text-emerald-400 hover:text-emerald-300 text-xs transition"
+                  >
+                    Download PDF
                   </button>
                 </div>
               </div>
@@ -154,10 +193,7 @@ const Invoices = () => {
                 <p className="text-slate-400 text-xs mb-2">Line Items</p>
                 <div className="space-y-1">
                   {invoice.lineItems.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex justify-between text-sm"
-                    >
+                    <div key={index} className="flex justify-between text-sm">
                       <span className="text-slate-300">
                         {item.description} x{item.quantity}
                       </span>

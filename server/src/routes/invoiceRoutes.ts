@@ -8,6 +8,7 @@ import {
   deleteInvoice,
 } from "../controllers/invoiceController";
 import { protect } from "../middleware/authMiddleware";
+import { downloadInvoicePDF } from "../controllers/pdfController";
 
 const router = Router();
 
@@ -19,5 +20,7 @@ router.get("/:id", getInvoice);
 router.put("/:id", updateInvoice);
 router.patch("/:id/status", updateInvoiceStatus);
 router.delete("/:id", deleteInvoice);
+router.get("/:id/pdf", downloadInvoicePDF);
+
 
 export default router;
