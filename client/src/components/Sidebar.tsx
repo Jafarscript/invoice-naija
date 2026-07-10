@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, useNavigate } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { useAuth } from "../context/AuthContext";
 
 const links = [
@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    navigate("/");
   };
 
   const handleNavClick = () => {
@@ -26,7 +26,7 @@ const Sidebar = () => {
     <>
       {/* Mobile top bar */}
       <div className="md:hidden fixed top-0 left-0 right-0 z-50 bg-slate-800 px-4 py-4 flex items-center justify-between">
-        <h1 className="text-emerald-400 font-bold text-lg">InvoiceNaija</h1>
+        <Link to='/'><h1 className="text-emerald-400 font-bold text-lg">InvoiceNaija</h1></Link>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="text-slate-400 hover:text-white transition"

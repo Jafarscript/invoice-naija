@@ -27,7 +27,7 @@ const Login = () => {
       navigate("/dashboard");
     } catch (err) {
       const error = err as { response?: { data?: { message?: string } } };
-  setError(error.response?.data?.message || "Something went wrong");
+      setError(error.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -100,6 +100,14 @@ const Login = () => {
             Create one
           </Link>
         </p>
+        <div className="flex justify-end">
+          <Link
+            to="/forgot-password"
+            className="text-emerald-400 hover:underline text-xs"
+          >
+            Forgot password?
+          </Link>
+        </div>
       </div>
     </div>
   );

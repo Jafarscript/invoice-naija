@@ -8,6 +8,9 @@ import Invoices from "./pages/invoices/Invoices";
 import Layout from "./components/Layout";
 import CreateInvoice from "./pages/invoices/CreateInvoice";
 import EditInvoice from "./pages/invoices/EditInvoice";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
+import Landing from "./pages/landing/Landing";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuth();
@@ -19,14 +22,64 @@ const App = () => {
 
   return (
     <Routes>
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-      <Route path="/register" element={!user ? <Register /> : <Navigate to="/dashboard" />} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-       <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
-      <Route path="/invoices" element={<ProtectedRoute><Invoices /></ProtectedRoute>} />
-      <Route path="/invoices/create" element={<ProtectedRoute><CreateInvoice /></ProtectedRoute>} />
-      <Route path="/invoices/:id/edit" element={<ProtectedRoute><EditInvoice /></ProtectedRoute>} />
-      <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
+      <Route path="/" element={<Landing />} />
+      <Route
+        path="/login"
+        element={!user ? <Login /> : <Navigate to="/dashboard" />}
+      />
+      <Route
+        path="/register"
+        element={!user ? <Register /> : <Navigate to="/dashboard" />}
+      />
+      <Route
+        path="/dashboard"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/clients"
+        element={
+          <ProtectedRoute>
+            <Clients />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/invoices"
+        element={
+          <ProtectedRoute>
+            <Invoices />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/invoices/create"
+        element={
+          <ProtectedRoute>
+            <CreateInvoice />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/invoices/:id/edit"
+        element={
+          <ProtectedRoute>
+            <EditInvoice />
+          </ProtectedRoute>
+        }
+      />
+      <Route path="*" element={<Navigate to={user ? "/dashboard" : "/"} />} />
+      <Route
+        path="/forgot-password"
+        element={!user ? <ForgotPassword /> : <Navigate to="/dashboard" />}
+      />
+      <Route
+        path="/reset-password"
+        element={!user ? <ResetPassword /> : <Navigate to="/dashboard" />}
+      />
     </Routes>
   );
 };

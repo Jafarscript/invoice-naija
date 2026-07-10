@@ -8,6 +8,8 @@ export interface IUser extends Document {
   bankName: string;
   accountNumber: string;
   accountName: string;
+  resetToken: string | undefined;
+  resetTokenExpiry: Date | undefined;
   createdAt: Date;
 }
 
@@ -20,6 +22,8 @@ const UserSchema = new Schema<IUser>(
     bankName: { type: String, default: "" },
     accountNumber: { type: String, default: "" },
     accountName: { type: String, default: "" },
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date },
   },
   { timestamps: true }
 );
