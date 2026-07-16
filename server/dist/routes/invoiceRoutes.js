@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const invoiceController_1 = require("../controllers/invoiceController");
+const authMiddleware_1 = require("../middleware/authMiddleware");
+const pdfController_1 = require("../controllers/pdfController");
+const router = (0, express_1.Router)();
+router.use(authMiddleware_1.protect);
+router.post("/", invoiceController_1.createInvoice);
+router.get("/", invoiceController_1.getInvoices);
+router.get("/:id", invoiceController_1.getInvoice);
+router.put("/:id", invoiceController_1.updateInvoice);
+router.patch("/:id/status", invoiceController_1.updateInvoiceStatus);
+router.delete("/:id", invoiceController_1.deleteInvoice);
+router.get("/:id/pdf", pdfController_1.downloadInvoicePDF);
+exports.default = router;
