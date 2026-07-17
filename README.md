@@ -97,6 +97,14 @@ Users · Clients    Invoice PDF gen        Password reset
 Invoices
 ```
 
+**CI/CD Flow:**
+
+```
+Push to GitHub
+  → Vercel detects change → auto builds and deploys frontend
+  → Render detects change → auto builds and deploys backend
+```
+
 **Request flow:**
 
 ```
@@ -179,7 +187,7 @@ The frontend will be running on `http://localhost:5173`
 | `MONGO_URI` | MongoDB Atlas connection string | `mongodb+srv://...` |
 | `JWT_SECRET` | Secret key for signing JWTs | `your_super_secret` |
 | `RESEND_API_KEY` | Resend API key for emails | `re_...` |
-| `FRONTEND_URL` | Frontend URL for reset link in emails | `http://localhost:5173` |
+| `FRONTEND_URL` | Frontend URL for reset link in emails | `https://invoice-naija.vercel.app` |
 
 > **Never commit your `.env` file to GitHub.** It is included in `.gitignore` by default.
 
@@ -213,7 +221,7 @@ The frontend will be running on `http://localhost:5173`
 | POST | `/` | Protected | Create a new invoice |
 | GET | `/` | Protected | Get all invoices for logged in user |
 | GET | `/:id` | Protected | Get a single invoice |
-| PUT | `/:id` | Protected | Update invoice (line items, due date, notes) |
+| PUT | `/:id` | Protected | Update invoice line items, due date, notes |
 | PATCH | `/:id/status` | Protected | Update invoice status only |
 | DELETE | `/:id` | Protected | Delete an invoice |
 | GET | `/:id/pdf` | Protected | Download invoice as PDF |
@@ -248,7 +256,7 @@ invoice-naija/
 │   │   │   └── authMiddleware.ts   # JWT protect middleware
 │   │   ├── models/
 │   │   │   ├── User.ts             # User schema + bank details
-│   │   │   ├── Client.ts           # Client schema (scoped per user)
+│   │   │   ├── Client.ts           # Client schema scoped per user
 │   │   │   └── Invoice.ts          # Invoice schema + line items
 │   │   ├── routes/
 │   │   │   ├── authRoutes.ts
@@ -286,8 +294,8 @@ invoice-naija/
     │   │   │   └── Clients.tsx     # Client list, create, edit, delete
     │   │   ├── invoices/
     │   │   │   ├── Invoices.tsx    # Invoice list, status update, delete
-    │   │   │   ├── CreateInvoice.tsx # Invoice form with live totals
-    │   │   │   └── EditInvoice.tsx # Edit existing invoice
+    │   │   │   ├── CreateInvoice.tsx
+    │   │   │   └── EditInvoice.tsx
     │   │   └── settings/
     │   │       └── Settings.tsx    # Profile + bank details
     │   ├── types/
@@ -306,23 +314,25 @@ invoice-naija/
 ### Backend — Render
 
 1. Push your code to GitHub
-2. Go to [render.com](https://render.com) and create a new **Web Service**
+2. Go to [render.com](https://render.com) and create a **New Web Service**
 3. Connect your GitHub repository
-4. Set the following:
-   - **Build Command:** `cd server && npm install && npm run build`
-   - **Start Command:** `cd server && npm start`
-5. Add all environment variables from `server/.env` in the Render dashboard
+4. Configure:
+   - **Root Directory:** `server`
+   - **Runtime:** `Node`
+   - **Build Command:** `npm install && npm run build`
+   - **Start Command:** `node dist/index.js`
+5. Add environment variables in the Render dashboard
 6. Deploy
 
 ### Frontend — Vercel
 
 1. Go to [vercel.com](https://vercel.com) and import your GitHub repository
-2. Set the **Root Directory** to `client`
-3. Add this environment variable:
-   - `VITE_API_URL=https://your-render-backend-url.onrender.com/api`
+2. Set **Root Directory** to `client`
+3. Add environment variable:
+   - `VITE_API_URL=https://your-render-url.onrender.com/api`
 4. Deploy
 
-> After deploying, update `FRONTEND_URL` in your Render environment variables to your live Vercel URL.
+> After deploying both, update `FRONTEND_URL` in Render to your live Vercel URL, and `VITE_API_URL` in Vercel to your live Render URL.
 
 ---
 
