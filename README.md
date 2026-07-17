@@ -78,24 +78,7 @@ It is a lightweight multi-user SaaS platform where any freelancer can sign up, m
 
 ## Architecture
 
-```
-User / Browser
-      │
-      │  HTTPS
-      ▼
-Vercel — Frontend (React + Vite + TypeScript + Tailwind)
-      │
-      │  REST API
-      ▼
-Render — Backend (Node.js + Express + TypeScript)
-      │
-      ├─────────────────────┬──────────────────────┐
-      │                     │                      │
-      ▼                     ▼                      ▼
-MongoDB Atlas          PDFKit                  Resend
-Users · Clients    Invoice PDF gen        Password reset
-Invoices
-```
+![Arch](https://res.cloudinary.com/dvo8xhx6r/image/upload/v1784323442/yzhw95cwagla6v3xha8u.svg)
 
 **CI/CD Flow:**
 
